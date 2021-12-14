@@ -1,0 +1,51 @@
+version: '3.8'
+
+networks:
+    docker-network:
+
+services:
+    mongodb:
+        image: mongo
+        container_name: mongodb
+        environment:
+            - PUID=1000
+            - PGID=1000
+        volumes:
+            - mongo_storage:/data/db
+        ports:
+            - 27017:27017
+        restart: unless-stopped
+        networks:
+            - docker-network
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+        container_name: es
+        environment:
+            - node.name=es
+            - cluster.initial_master_nodes=es
+            - bootstrap.memory_lock=true
+            - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - elasticsearch_storage:/usr/share/elasticsearch/data
+        ports:
+            - 9200:9200
+        networks:
+            - docker-network
+    kibana:
+        image: docker.elastic.co/kibana/kibana:7.16.1
+        depends_on:
+            - elasticsearch
+        ports:
+            - 5601:5601
+        networks:
+            - docker-network
+
+volumes:
+    elasticsearch_storage:
+        driver: local
+    mongo_storage:
+        driver: local
