@@ -19,7 +19,7 @@ services:
             - docker-network
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
-        container_name: es
+        container_name: es7
         environment:
             - node.name=es
             - cluster.initial_master_nodes=es
@@ -30,13 +30,40 @@ services:
                 soft: -1
                 hard: -1
         volumes:
-            - elasticsearch_storage:/usr/share/elasticsearch/data
+            - elasticsearch_storage:/usr/share/elasticsearch7.16.1/data
         ports:
             - 9200:9200
         networks:
             - docker-network
     kibana:
         image: docker.elastic.co/kibana/kibana:7.16.1
+        container_name: kibana7
+        depends_on:
+            - elasticsearch
+        ports:
+            - 5601:5601
+        networks:
+            - docker-network
+    elasticsearch6:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.8.1
+        container_name: es6
+        environment:
+            - cluster.name=docker-cluster
+            - bootstrap.memory_lock=true
+            - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - elasticsearch_storage:/usr/share/elasticsearch6.8.1/data
+        ports:
+            - 9200:9200
+        networks:
+            - docker-network
+    kibana6:
+        image: docker.elastic.co/kibana/kibana:6.8.1
+        container_name: kibana6
         depends_on:
             - elasticsearch
         ports:
