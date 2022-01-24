@@ -1,19 +1,21 @@
 # local-docker
-Docker compose for local development.
+Docker-compose for local development.
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 ## Installation
+* Clone the repository
 * Install docker-desktop from https://www.docker.com/get-started
 * Start docker-desktop
+* Get inside local-dokcer repository folder.
 
 ## MongoDB
-* To run the mongodb inside docker container run the command
+* To run the MongoDB inside the docker container run the command
 ```sh
-docker-compose up monogdb -d
+docker-compose up MongoDB -d
 ```
 
-* If you want to connect with mongodb from your host machine to container then install mongo client on host machine.
+* If you want to connect with MongoDB from your host machine to the container then install mongo client on the host machine.
 ```sh
 xcode-select --install
 ```
@@ -23,7 +25,7 @@ brew tap mongodb/brew
 ```sh
 brew install mongodb-community-shell mongodb-database-tools mongosh
 ```
-Now you can access your mongodb instance by running `mongo` command on terminal.
+Now you can access your MongoDB instance by running the `mongo` command on the terminal.
 
 
 ## Elasticsearch
@@ -69,9 +71,9 @@ elasticsearch.username: kibana
 elasticsearch.password: <kibana password>
 ```
 
-* To run the kibana inside docker container run the command
+* To run the kibana inside the docker container run the command
 ```sh
 docker-compose up kibana -d
 ```
-Now you can access your kibana instance on http://localhost:5601. It will require username and password.
+Now you can access your kibana instance on http://localhost:5601. It will require a username and password.
 username will be `elastic` and password will be `<YOUR_ELASTIC_USER_PASSWORD>`
