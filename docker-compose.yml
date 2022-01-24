@@ -11,72 +11,40 @@ services:
             - PUID=1000
             - PGID=1000
         volumes:
-            - mongo_storage:/data/db
+            - ./data/mongodb:/data/db
         ports:
             - 27017:27017
         restart: unless-stopped
         networks:
             - docker-network
-    es:
+    
+    elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
-        container_name: es
-        environment:
-            - node.name=es
-            - cluster.initial_master_nodes=es
-            - bootstrap.memory_lock=true
-            - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+        container_name: elasticsearch
         ulimits:
             memlock:
                 soft: -1
                 hard: -1
+        environment:
+            - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
         volumes:
-            - elasticsearch_storage:/usr/share/elasticsearch7.16.1/data
+            - ./elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
+            - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+            - ./data/elasticsearch:/usr/share/elasticsearch/data
         ports:
             - 9200:9200
         networks:
             - docker-network
+    
     kibana:
         image: docker.elastic.co/kibana/kibana:7.16.1
         container_name: kibana
         depends_on:
-            - es
+            - elasticsearch
         ports:
             - 5601:5601
         networks:
             - docker-network
-        environment:
-            ELASTICSEARCH_HOSTS: '["http://es:9200"]'
-    es6:
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.8.1
-        container_name: es6
-        environment:
-            - cluster.name=docker-cluster
-            - bootstrap.memory_lock=true
-            - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
         volumes:
-            - elasticsearch_storage:/usr/share/elasticsearch6.8.1/data
-        ports:
-            - 9200:9200
-        networks:
-            - docker-network
-    kibana6:
-        image: docker.elastic.co/kibana/kibana:6.8.1
-        container_name: kibana6
-        depends_on:
-            - es6
-        ports:
-            - 5601:5601
-        networks:
-            - docker-network
-        environment:
-            ELASTICSEARCH_HOSTS: '["http://es6:9200"]'
-
-volumes:
-    elasticsearch_storage:
-        driver: local
-    mongo_storage:
-        driver: local
+        - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+    
