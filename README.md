@@ -23,6 +23,8 @@ brew tap mongodb/brew
 ```sh
 brew install mongodb-community-shell mongodb-database-tools mongosh
 ```
+Now you can access your mongodb instance by running `mongo` command on terminal.
+
 
 ## Elasticsearch
 ### Setup
