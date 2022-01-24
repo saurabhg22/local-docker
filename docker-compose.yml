@@ -19,7 +19,7 @@ services:
             - docker-network
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
-        container_name: es7
+        container_name: elasticsearch7
         environment:
             - node.name=es
             - cluster.initial_master_nodes=es
@@ -46,7 +46,7 @@ services:
             - docker-network
     elasticsearch6:
         image: docker.elastic.co/elasticsearch/elasticsearch:6.8.1
-        container_name: es6
+        container_name: elasticsearch6
         environment:
             - cluster.name=docker-cluster
             - bootstrap.memory_lock=true
@@ -65,7 +65,7 @@ services:
         image: docker.elastic.co/kibana/kibana:6.8.1
         container_name: kibana6
         depends_on:
-            - elasticsearch
+            - elasticsearch6
         ports:
             - 5601:5601
         networks:
